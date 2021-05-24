@@ -13,9 +13,7 @@ namespace Grocers.Controllers
     public class HomeController : Controller
     {
         CustomerManager customerManager = new CustomerManager();
-        //
-        // GET: /Home/
-
+        
         public ActionResult Index()
         {
             return View();
