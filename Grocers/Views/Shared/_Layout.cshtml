@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="@Url.Content("~/css/bootstrap.min.css")"
+    rel="Stylesheet" type="text/css" />
+    <!-- jQuery library -->
+    <script src="@Url.Content("~/scripts/jquery-3.0.0.min.js")" type="text/javascript"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="@Url.Content("~/js/bootstrap.min.js")" type="text/javascript"></script>
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker.css" type="text/css" />
+    <script src="~/js/bootstrap-datepicker.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript">
+        function scrollToTop() {
+            window.scrollTo(0, 0);
+        }
+    </script>
+    <style type="text/css">
+        .webgrid-header {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+        }
+    </style>
+    <style type="text/css">
+        .loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url('../Images/ajax-loader.gif') 50% 50% no-repeat rgb(249,249,249);
+            opacity: .8;
+        }
+
+        .table-pager > td {
+            padding-top: 10px;
+            text-align: center;
+        }
+
+            .table-pager > td > a {
+                background-color: #28a745;
+                color: white;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                padding: 3px 7px;
+            }
+    </style>
+</head>
+<body style="background-color: aliceblue;">
+
+    <div class="loader" style="display: none;"></div>
+
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #28a745!important;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="~/Home/Index">
+                    <img src="~/Images/grocers_logo.png" /></a>
+                @*@Html.ActionLink("GROCERS", "Index", "Home", null, new { @class = "navbar-brand" })*@
+            </div>
+            @*nav navbar-nav *@
+            <ul class="nav navbar-nav ">
+                <li style="padding-right: 15px;">
+                    @Html.ActionLink("Store", "Index", "Store", null, new { @style = "color:white;text-decoration: none;" })
+                </li>
+                <li class="dropdown" style="padding-right: 15px;">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color: white; text-decoration: none;">Category
+                     <span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="background-color: #28a745!important;">
+                        <li style="padding-right: 15px;">
+                            @Html.ActionLink("Add/Edit/List", "Index", "Category", null, new { @style = "color:white;text-decoration: none;" })
+                        </li>
+                        <li style="padding-right: 15px;">
+                            @Html.ActionLink("UOM Mapping", "CategoryUomMapping", "Category", null, new { @style = "color:white;text-decoration: none;" })
+                        </li>
+                    </ul>
+                </li>
+                <li style="padding-right: 15px;">
+                    @Html.ActionLink("Brand", "Index", "Brand", null, new { @style = "color:white;text-decoration: none;" })
+                </li>
+                <li style="padding-right: 15px;">
+                    @Html.ActionLink("Product", "Index", "Product", null, new { @style = "color:white;text-decoration: none;" })
+                </li>
+                <li class="dropdown" style="padding-right: 15px;">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color: white; text-decoration: none;">Stock
+                     <span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="background-color: #28a745!important;">
+                        <li style="padding-right: 15px;">
+                            @Html.ActionLink("Add Stock", "Index", "Stock", null, new { @style = "color:white;text-decoration: none;" })
+                        </li>
+                        <li style="padding-right: 15px;">
+                            @Html.ActionLink("Current Stock", "CurrentStock", "Stock", null, new { @style = "color:white;text-decoration: none;" })
+                        </li>
+                    </ul>
+                </li>
+
+                <li style="padding-right: 15px;">
+                    @Html.ActionLink("Order", "Index", "Order", null, new { @style = "color:white;text-decoration: none;" })
+                </li>
+                <li class="dropdown" style="padding-right: 15px;">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color: white; text-decoration: none;">Customer
+                     <span class="caret"></span></a>
+                    <ul class="dropdown-menu" style="background-color: #28a745!important;">
+                        <li style="padding-right: 15px;">
+                            @Html.ActionLink("Add/Edit/List", "Index", "Customer", null, new { @style = "color:white;text-decoration: none;" })
+                        </li>
+                        <li style="padding-right: 15px;">
+                            @Html.ActionLink("Customer Points", "CustomerPoints", "Customer", null, new { @style = "color:white;text-decoration: none;" })
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    @Html.ActionLink("Logout", "Logout", "Account", null, new { @style = "color:white;text-decoration: none;" })
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="container" style="min-height:400px;">
+        @RenderBody()
+    </div>
+    <!-- Footer -->
+    <footer class="page-footer font-small blue">
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2020 Copyright:
+    <a href="~/Home/Index"> Grocers.com</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+    <!-- Footer -->
+</body>
+</html>

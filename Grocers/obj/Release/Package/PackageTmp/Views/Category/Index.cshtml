@@ -1,0 +1,136 @@
+﻿@model IEnumerable<Grocers.Models.Category>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Category";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            if($('#category_name').val()=='')
+            {
+                $('#valMessageCategoryName').show();
+            }
+            else if($('#category_point').val()==''){
+                $('#valMessageCategoryPoint').show();
+            }
+            else
+            {
+                $('#valMessageCategoryName').hide();
+                $('#valMessageCategoryPoint').hide();
+                CreateOrUpdateCategory();
+            }
+        });
+        $('#btnCancel').click(function () {
+            location.reload();
+        });
+    });
+    function Edit(category_id) {
+        $('#valMessageCategoryName').hide();
+        $('#category_id').val(category_id);
+        var store=$('#tr_'+category_id+' td');
+        $('#category_name').val(store[1].innerHTML);
+        var point=store[2].innerHTML;
+        if(point!="0")
+        {
+            $('#category_point').val(point);
+        }
+        else{
+            $('#category_point').val('');
+        }
+       
+        scrollToTop();
+    }
+    function CreateOrUpdateCategory()
+    {
+        var category = {
+            category_id: $('#category_id').val(),
+            category_name: $('#category_name').val(),
+            category_point:$('#category_point').val()
+        };
+        $.ajax({
+            contentType: 'application/json',
+            type: "POST",
+            url: "../Category/CreateOrUpdateCategory",
+            data: JSON.stringify(category),
+            success: function (d) {
+                location.reload();
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    }
+</script>
+
+@Html.Hidden("category_id")
+<br />
+<div id="message" style="display: none;">
+</div>
+<h2>Category Details</h2>
+<div class="row">
+
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="category_name">
+                Category Name</label>
+            @Html.TextBox("category_name", null, new { @class = "form-control" })
+            <span id="valMessageCategoryName" style="color: red; display: none;">Category Name is required!</span>
+
+        </div>
+        <div class="form-group">
+            <label for="occupation">
+                Category Point</label>
+            @Html.DropDownList("category_point", new List<SelectListItem>  
+     { new SelectListItem { Text = "1", Value = "1"},  
+       new SelectListItem { Text = "2", Value = "2"},  
+       new SelectListItem { Text = "4", Value = "4"} 
+       }, "Select Category Point", new { @class = "form-control" })
+            <span id="valMessageCategoryPoint" style="color: red; display: none;">Category Point is required!</span>
+        </div>
+        <input id="btnSave" type="button" value="SAVE" class="btn btn-success" />
+        <input id="btnCancel" type="button" value="CANCEL" class="btn btn-success" />
+    </div>
+
+    <div class="col-sm-4">
+    </div>
+    
+    <div class="col-sm-4">
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered" style="width:100%;">
+            <tr style="background-color:#28a745;color:white;">
+                <th>Category Id </th>
+                <th style="text-align: center;">Category Name </th>
+                <th>Category Point</th>
+                <th>Action</th>
+            </tr>
+            @if (Model != null && Model.ToList().Count > 0)
+            {
+                foreach (var d in Model)
+                {  
+                <tr id="tr_@d.category_id">
+                    <td >@d.category_id</td>
+                    <td>@d.category_name</td>
+                    <td>@d.category_point</td>
+                    <td>
+                        <input class="btn btn-link" type="button" id="edit_@d.category_id" value="Edit" onclick="Edit(@d.category_id)" />
+                    </td>
+                </tr>  
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No Records</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

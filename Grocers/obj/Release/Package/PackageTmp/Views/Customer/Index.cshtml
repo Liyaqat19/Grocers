@@ -1,0 +1,216 @@
+﻿@model Grocers.Models.CustomerViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Customer";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            //alert($("#dob").datepicker('getDate'));
+            if ($('#customer_name').val() == '') {
+                $('#valMessageCustomerName').show();
+            }
+            else if ($('#password').val() == '') {
+                $('#valMessagePassword').show();
+            }
+            else if ($('#introducer_id').val() == '') {
+                $('#valMessageIntroducer').show();
+            }
+            else if ($('#parent_id').val() == '') {
+                $('#valMessageParent').show();
+            }
+            else {
+                $('#valMessageCustomerName').hide();
+                $('#valMessagePassword').hide();
+                $('#valMessageIntroducer').hide();
+                $('#valMessageParent').hide();
+                CreateOrUpdateCustomer();
+            }
+        });
+        $('#btnCancel').click(function () {
+            location.reload();
+        });
+
+     
+    });
+
+    function CreateOrUpdateCustomer() {
+        var customer = {
+            customer_id: $('#customer_id').val(),
+            customer_name: $('#customer_name').val(),
+            password: $('#password').val(),
+            mobile_number: $('#mobile_number').val(),
+            dob: $("#dob").datepicker('getDate'),
+            occupation: $('#occupation').val(),
+            introducer_id: $('#introducer_id').val(),
+            parent_id: $('#parent_id').val(),
+            is_active: $('#is_active').val()
+        };
+        //alert(customer.dob);
+        $.ajax({
+            contentType: 'application/json',
+            type: "POST",
+            url: "../Customer/AddOrUpdateCustomer",
+            data: JSON.stringify(customer),
+            success: function (d) {
+                location.reload();
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    }
+    function Edit(customer_id) {
+        //var customerId = customer_id;
+        //alert(customerId);
+        $.ajax({
+            contentType: 'application/json',
+            type: "GET",
+            url: "../Customer/GetCustomerDetailsById?customer_id=" + customer_id,
+            //data: {},
+            success: function (d) {
+                //alert(d.data.dobString);
+                $('#customer_id').val(customer_id);
+                $('#customer_name').val(d.data.customer_name);
+                $('#password').val(d.data.password);
+                $('#mobile_number').val(d.data.mobile_number);
+                $('#dob').val(d.data.dobString);
+                $('#occupation').val(d.data.occupation);
+                $('#introducer_id').val(d.data.introducer_id);
+                $('#introducer_id').prop("disabled",true);
+                
+                var exists = $('#parent_id option').filter(function () { return $(this).val() == d.data.parent_id; }).length;
+                if (exists == 0)
+                {
+                    $('#parent_id').append($('<option>', {
+                        value: d.data.parent_id,
+                        text: d.data.ParentName
+                    }));
+                }
+                $('#parent_id').val(d.data.parent_id);
+                $('#parent_id').prop("disabled", true);
+                if (d.data.is_active == true)
+                {
+                    $("#is_active").prop("checked", true);
+                }
+                else {
+                    $("#is_active").prop("checked", false);
+                }
+                window.scrollTo(0, 0);
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+
+    }
+    $(function () {
+        $('#dob').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "mm/dd/yyyy",
+            language: "en"
+        });
+    });
+</script>
+@Html.Hidden("customer_id")
+<br />
+<div id="message" style="display: none;">
+</div>
+<h2>Customer Details</h2>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="customer_name">
+                Customer Name</label>
+            @Html.TextBox("customer_name", null, new { @class = "form-control" })
+            <span id="valMessageCustomerName" style="color: red; display: none;">Customer Name is required!</span>
+        </div>
+
+        <div class="form-group">
+            <label for="password">
+                Password</label>
+            @Html.Password("password", null, new { @class = "form-control" })
+            <span id="valMessagePassword" style="color: red; display: none;">Password is required!</span>
+        </div>
+        <div class="form-group">
+            <label for="mobile_number">
+                Mobile Number</label>
+            @Html.TextBox("mobile_number", null, new { @class = "form-control" })
+            @*<span id="valMessageMobile Number" style="color: red; display: none;">Mobile Number is required!</span>*@
+        </div>
+        <div class="form-group">
+            <label for="dob">
+                Date Of Birth</label>
+            @Html.TextBox("dob", null, new { @class = "form-control" })
+            @*<span id="valMessageDate Of Birth" style="color: red; display: none;">Date Of Birth is required!</span>*@
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="occupation">
+                Occupation</label>
+            @Html.DropDownList("occupation", new List<SelectListItem>  
+     { new SelectListItem { Text = "Job", Value = "1"},  
+       new SelectListItem { Text = "Bussiness", Value = "2"},  
+       new SelectListItem { Text = "ZariWork", Value = "3"} ,
+       new SelectListItem { Text = "Mukaish", Value = "4"},
+       new SelectListItem { Text = "Other", Value = "5"}  
+       }, "Select Occupation", new { @class = "form-control" })
+            <span id="valMessageOccupation" style="color: red; display: none;">Occupation is required!</span>
+        </div>
+        <div class="form-group">
+            <label for="introducer_id">
+                Introducer</label>
+            @Html.DropDownList("introducer_id", Model.IntroducerList, "Select Introducer", new { @class = "form-control" })
+            <span id="valMessageIntroducer" style="color: red; display: none;">Introducer is required!</span>
+        </div>
+        <div class="form-group">
+            <label for="parent_id">
+                Parent</label>
+            @Html.DropDownList("parent_id", Model.ParentList, "Select Parent", new { @class = "form-control" })
+            <span id="valMessageParent" style="color: red; display: none;">Parent is required!</span>
+        </div>
+        <div class="form-group">
+            <label for="is_active">
+                @Html.CheckBox("is_active") Is Active</label>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="form-group text-center">
+            <input id="btnSave" type="button" value="SAVE" class="btn btn-success" />
+            <input id="btnCancel" type="button" value="CANCEL" class="btn btn-success" />
+        </div>
+    </div>
+</div><br />
+<h2>Customer List</h2>
+<div class="row">
+    <div class="col-sm-12">
+        @{  
+            var grid = new WebGrid(Model.CustomerList, canPage: true,canSort:false, rowsPerPage: 5);
+            grid.Pager(WebGridPagerModes.All);
+        }
+
+        @grid.GetHtml(tableStyle: "table table-bordered",
+        headerStyle:"webgrid-header",
+        footerStyle: "table-pager",
+columns: grid.Columns(
+grid.Column("customer_code", "Customer Code"),
+grid.Column("customer_name", "Customer Name"),
+grid.Column("mobile_number", "Mobile"),
+grid.Column("IntroducerName", "Introducer"),
+grid.Column("edit", "Action", format:@<button class="btn btn-link" id="edit_@item.customer_id" onclick="Edit(@item.customer_id)">Edit</button>)
+))
+    </div>
+</div>
+

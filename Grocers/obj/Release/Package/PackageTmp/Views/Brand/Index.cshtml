@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Grocers.Models.Brand>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Brand";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            if($('#brand_name').val()=='')
+            {
+                $('#valMessageBrandName').show();
+            }
+            else
+            {
+                $('#valMessageBrandName').hide();
+                CreateOrUpdateBrand();
+            }
+        });
+        $('#btnCancel').click(function () {
+            location.reload();
+        });
+    });
+    function Edit(brand_id) {
+        $('#valMessageBrandName').hide();
+        $('#brand_id').val(brand_id);
+        var tr=$('#tr_'+brand_id+' td');
+        $('#brand_name').val(tr[1].innerHTML);
+        scrollToTop();
+    }
+    function CreateOrUpdateBrand()
+    {
+        var brand = {
+            brand_id: $('#brand_id').val(),
+            brand_name: $('#brand_name').val()
+        };
+        $.ajax({
+            contentType: 'application/json',
+            type: "POST",
+            url: "../Brand/CreateOrUpdateBrand",
+            data: JSON.stringify(brand),
+            success: function (d) {
+                location.reload();
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    }
+</script>
+@Html.Hidden("brand_id")
+<br />
+<div id="message" style="display: none;">
+</div>
+<h2>Brand Details</h2>
+<div class="row">
+
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="brand_name">
+                Brand Name</label>
+            @Html.TextBox("brand_name", null, new { @class = "form-control" })
+            <span id="valMessageBrandName" style="color: red; display: none;">Brand Name is required!</span>
+
+        </div>
+
+        <input id="btnSave" type="button" value="SAVE" class="btn btn-success" />
+        <input id="btnCancel" type="button" value="CANCEL" class="btn btn-success" />
+    </div>
+
+    <div class="col-sm-4">
+    </div>
+    
+    <div class="col-sm-4">
+    </div>
+</div>
+<br />
+<h2>Brand List</h2>
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered" style="width:100%;">
+            <tr style="background-color:#28a745;color:white;">
+                <th>Brand Id </th>
+                <th style="text-align: center;">Brand Name </th>
+                <th>Action </th>
+            </tr>
+            @if (Model != null && Model.ToList().Count > 0)
+            {
+                foreach (var d in Model)
+                {  
+                <tr id="tr_@d.brand_id">
+                    <td >@d.brand_id</td>
+                    <td>@d.brand_name</td>
+                    <td>
+                        <input class="btn btn-link" type="button" id="edit_@d.brand_id" value="Edit" onclick="Edit(@d.brand_id)" />
+                    </td>
+                </tr>  
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No Records</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

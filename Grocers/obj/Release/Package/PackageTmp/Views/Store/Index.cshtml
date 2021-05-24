@@ -1,0 +1,153 @@
+﻿@model IEnumerable<Grocers.Models.Store>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Store";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            if($('#txtStoreName').val()=='')
+            {
+                $('#valMessageStoreName').show();
+            }
+            else
+            {
+                $('#valMessageStoreName').hide();
+                SaveOrUpdateStore();
+            }
+        });
+        $('#btnCancel').click(function () {
+            location.reload();
+        });
+    });
+    function EditStore(store_id) {
+        $('#valMessageStoreName').hide();
+        $('#store_id').val(store_id);
+        var store=$('#tr_'+store_id+' td');
+        $('#txtStoreName').val(store[1].innerHTML);
+        $('#txtPhone').val(store[2].innerHTML);
+        $('#txtEmail').val(store[3].innerHTML);
+        $('#txtStoreAddress').val(store[4].innerHTML);
+        scrollToTop();
+    }
+    function SaveOrUpdateStore()
+    {
+        var store = {
+            store_id: $('#store_id').val(),
+            store_name: $('#txtStoreName').val(),
+            phone: $('#txtPhone').val(),
+            email: $('#txtEmail').val(),
+            store_address: $('#txtStoreAddress').val()
+        };
+        $.ajax({
+            contentType: 'application/json',
+            type: "POST",
+            url: "../Store/CreateOrUpdateStore",
+            data: JSON.stringify(store),
+            success: function (d) {
+                //var message = $('#message');
+                //message.show();
+                //if($('#store_id').val()=='0' ||$('#store_id').val()=='')
+                //{
+                //    message.text('Store created successfully!');
+                //}
+                //else
+                //{
+                //    message.text('Store updated successfully!');
+                //}
+               
+                //message.addClass('alert alert-success');
+                //$('#store_id').val(0);
+                //$('#txtStoreName').val('');
+                //$('#txtPhone').val('');
+                //$('#txtEmail').val('');
+                //$('#txtStoreAddress').val('');
+                location.reload();
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    }
+</script>
+
+@Html.Hidden("store_id")
+<br />
+<div id="message" style="display: none;">
+</div>
+<h2>Store Details</h2>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="txtStoreName">
+                Store Name</label>
+            @Html.TextBox("txtStoreName", null, new { @class = "form-control" })
+            <span id="valMessageStoreName" style="color: red; display: none;">Store Name is required!</span>
+
+        </div>
+        <div class="form-group">
+            <label for="txtEmail">
+                Email</label>
+            @Html.TextBox("txtEmail", null, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="txtPhone">
+                Phone</label>
+            @Html.TextBox("txtPhone", null, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label for="txtStoreAddress">
+                Address</label>
+            @Html.TextArea("txtStoreAddress", null, new { @class = "form-control", @rows = "3" })
+
+        </div>
+
+        <input id="btnSave" type="button" value="SAVE" class="btn btn-success" />
+        <input id="btnCancel" type="button" value="CANCEL" class="btn btn-success" />
+    </div>
+
+
+    <div class="col-sm-4">
+    </div>
+    
+    <div class="col-sm-4">
+    </div>
+</div>
+<br />
+<h2>Store List</h2>
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered" style="width:100%;">
+            <tr style="background-color:#28a745;color:white;">
+                <th style="display: none;">Store Id </th>
+                <th style="text-align: center;">Store Name </th>
+                <th style="text-align: center;">Phone </th>
+                <th style="text-align: center;">Email</th>
+                <th style="text-align: center;">Address</th>
+                <th style="text-align: center;">Action</th>
+            </tr>
+            @foreach (var d in Model)
+            {  
+                <tr id="tr_@d.store_id">
+                    <td style="display: none;">@d.store_id</td>
+                    <td>@d.store_name</td>
+                    <td>@d.phone</td>
+                    <td>@d.email</td>
+                    <td>@d.store_address</td>
+                    <td>
+                        <input class="btn btn-link" type="button" id="edit_@d.store_id" value="Edit" onclick="EditStore(@d.store_id)" />
+                    </td>
+                </tr>  
+            }
+        </table>
+    </div>
+</div>
+
+
+
+

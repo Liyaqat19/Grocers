@@ -1,0 +1,234 @@
+﻿@model Grocers.Models.ProductViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Product";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            if($('#product_name').val()=='')
+            {
+                $('#valMessageProductName').show();
+            }
+            else if($('#brand_id').val()=='')
+            {
+                $('#valMessageBrandName').show();
+            }
+            else if($('#category_id').val()=='')
+            {
+                $('#valMessageCategoryName').show();
+            }
+            else if($('#uom_id').val()=='')
+            {
+                $('#valMessageUOMName').show();
+            }
+            else if($('#cost_price').val()=='')
+            {
+                $('#valMessageCostPriceName').show();
+            }
+            else
+            {
+                $('#valMessageProductName').hide();
+                $('#valMessageBrandName').hide();
+                $('#valMessageCategoryName').hide();
+                $('#valMessageUOMName').hide();
+                $('#valMessageCostPriceName').hide();
+                SaveOrUpdateProduct();
+            }
+        });
+        $('#btnCancel').click(function () {
+            location.reload();
+        });
+        $('#category_id').change(function () {
+
+            if($(this).val()!='')
+            {
+                var category_id = $(this).val();
+                LoadUOMDropDown(category_id,false,'');
+            }
+            else
+            {
+                $("#uom_id").empty();
+                $("#uom_id").append('<option value="">Select UOM</option>');
+            }
+        });
+
+    });
+    
+    function LoadUOMDropDown(category_id,isEdit,uom_id)
+    {
+        $.ajax({
+            contentType: 'application/json',
+            type: "GET",
+            url: "../Category/GetUomDropDownList?category_id="+category_id,
+            success: function (data) {
+                $("#uom_id").empty();
+                $("#uom_id").append('<option value="">Select UOM</option>');
+                $.each(data, function (id, result) {
+                    $("#uom_id").append('<option value="'+result.Value+'">'+result.Text+'</option>');
+                });
+                if(isEdit)
+                {
+                    $('#uom_id').val(uom_id);
+                }
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    }
+    function Edit(product_id,category_id) {
+        $('#valMessageProductName').hide();
+        $('#valMessageBrandName').hide();
+        $('#valMessageCategoryName').hide();
+        $('#valMessageUOMName').hide();
+        $('#valMessageCostPriceName').hide();
+        $('#product_id').val(product_id);
+        var product=$('#tr_'+product_id+' td');
+        $('#product_name').val(product[1].innerHTML);
+        $('#brand_id').val($(product[2]).attr('br'));
+        $('#category_id').val($(product[3]).attr('ca'));
+        LoadUOMDropDown(category_id,true,$(product[4]).attr('uo'));
+        $('#cost_price').val(product[5].innerHTML);
+        scrollToTop();
+    }
+    function SaveOrUpdateProduct()
+    {
+        var product = {
+            product_id: $('#product_id').val(),
+            product_name: $('#product_name').val(),
+            brand_id: $('#brand_id').val(),
+            category_id: $('#category_id').val(),
+            uom_id: $('#uom_id').val(),
+            cost_price: $('#cost_price').val()
+        };
+        $.ajax({
+            contentType: 'application/json',
+            type: "POST",
+            url: "../Product/CreateOrUpdateProduct",
+            data: JSON.stringify(product),
+            success: function (d) {
+                location.reload();
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    }
+</script>
+@Html.Hidden("product_id")
+<br />
+<div id="message" style="display: none;">
+</div>
+<h2>Product Details</h2>
+<div class="row">
+
+    <div class="col-sm-4">
+        
+        <div class="form-group">
+            <label for="category_id">
+                Category</label>
+            @if (Model.CategoryList != null && Model.CategoryList.Count > 0)
+            {
+                @Html.DropDownList("category_id", Model.CategoryList, "Select Category", new { @class = "form-control" })
+            }
+            else
+            {
+                @Html.DropDownList("category_id", new List<SelectListItem>(), "Select Category", new { @class = "form-control" })
+            }
+            <span id="valMessageCategoryName" style="color: red; display: none;">Category is required!</span>
+
+        </div>
+        <div class="form-group">
+            <label for="uom_id">
+                UOM</label>
+            @Html.DropDownList("uom_id", new List<SelectListItem>(),"Select UOM", new { @class = "form-control" })
+            <span id="valMessageUOMName" style="color: red; display: none;">UOM is required!</span>
+
+        </div>
+        <div class="form-group">
+            <label for="brand_id">
+                Brand</label>
+            @if (Model.BrandList != null && Model.BrandList.Count > 0)
+            {
+                @Html.DropDownList("brand_id", Model.BrandList, "Select Brand", new { @class = "form-control" })
+            }
+            else
+            {
+                @Html.DropDownList("brand_id", new List<SelectListItem>(), "Select Brand", new { @class = "form-control" })
+            }
+            <span id="valMessageBrandName" style="color: red; display: none;">Brand is required!</span>
+
+        </div>
+        <div class="form-group">
+            <label for="product_name">
+                Product Name</label>
+            @Html.TextBox("product_name", null, new { @class = "form-control" })
+            <span id="valMessageProductName" style="color: red; display: none;">Product Name is required!</span>
+
+        </div>
+        <div class="form-group">
+            <label for="cost_price">
+                Cost Price</label>
+            @Html.TextBox("cost_price", null, new { @class = "form-control" })
+            <span id="valMessageCostPriceName" style="color: red; display: none;">Cost Price is required!</span>
+
+        </div>
+
+        <input id="btnSave" type="button" value="SAVE" class="btn btn-success" />
+        <input id="btnCancel" type="button" value="CANCEL" class="btn btn-success" />
+    </div>
+
+    <div class="col-sm-4">
+    </div>
+    
+    <div class="col-sm-4">
+    </div>
+</div>
+<br />
+<h2>Product List</h2>
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered" style="width:100%;">
+            <tr style="background-color:#28a745;color:white;">
+                <th style="text-align: center;">Product Id </th>
+                <th style="text-align: center;">Product Name </th>
+                <th style="text-align: center;">Brand</th>
+                <th style="text-align: center;">Category </th>
+                 <th style="text-align: center;">UOM </th>
+                <th style="text-align: center;">Current Cost Price </th>
+                @*<th style="text-align: center;">Action</th>*@
+            </tr>
+            @if (Model.ProductList != null && Model.ProductList.ToList().Count > 0)
+            {
+                foreach (var d in Model.ProductList.ToList())
+                {  
+                <tr id="tr_@d.product_id">
+                    <td>@d.product_id</td>
+                    <td >@d.product_name</td>
+                    <td br="@d.brand_id">@d.brand_name</td>
+                    <td ca="@d.category_id">@d.category_name</td>
+                    <td uo="@d.uom_id">@d.uom_name</td>
+                    <td>@d.cost_price</td>
+                   @* <td>
+                        <input class="btn btn-link" type="button" id="edit_@d.product_id" value="Edit" onclick="Edit(@d.product_id,@d.category_id)" />
+                    </td>*@
+                </tr>  
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7">No Records</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

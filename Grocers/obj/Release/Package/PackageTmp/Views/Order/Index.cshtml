@@ -1,0 +1,493 @@
+﻿@model Grocers.Models.OrderViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Order";
+    WebGrid webGrid = new WebGrid(source: Model.OrderList, canPage: true,rowsPerPage: 5, canSort: false);
+}
+<style>
+    .cellHide {
+        display: none;
+    }
+
+    .header_table {
+        background-color: #28a745;
+        color: white;
+    }
+</style>
+<script type="text/javascript">
+    var orderItemList = [];
+    
+    $(document).ready(function () {
+      
+      
+        //called when key is pressed in textbox
+        $("#selling_price").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57) && e.which != 46) {
+                //display error message
+                $("#valMessageSellingPrice2").show();
+                return false;
+            }
+            else {
+                $("#valMessageSellingPrice2").hide();
+            }
+        
+        });
+
+        $("#quantity").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#valMessageQuantity2").show();
+                return false;
+            }
+            else {
+                $("#valMessageQuantity2").hide();
+            }
+        });
+        $("#discount").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#valMessageDiscount").show();
+                return false;
+            }
+            else {
+                $("#valMessageDiscount").hide();
+            }
+        });
+
+        $('#btnSave').click(function () {
+            if ($('#customer_id').val() == '') {
+                $('#valMessageCustomerName').show();
+            }
+            else if ($('#store_id').val() == '') {
+                $('#valMessageStoreName').show();
+            }
+            else if ($('#order_status_id').val() == '') {
+                $('#valMessageOrderStatus').show();
+            }
+            else if ($('#order_date').val() == '') {
+                $('#valMessageOrderDate').show();
+            }
+            else {
+                $('#valMessageCustomerName').hide();
+                $('#valMessageStoreName').hide();
+                $('#valMessageOrderStatus').hide();
+                $('#valMessageOrderDate').hide();
+                $('#valMessageRequiredDate').hide();
+                if(orderItemList.length>0)
+                {
+                    Createorder();
+                }
+                else
+                {
+                    alert('Please Add Order Items.');
+                }
+            }
+        });
+        $('#btnCancel').click(function () {
+            location.reload();
+        });
+        $("#btnAddItem").click(function (e) {
+            e.preventDefault();
+            if (IsValid()) {
+                var product_id = $("#product_name").val();
+                GetProductCurrentStock(product_id);
+            }
+        });
+        $("#closbtn").click(function()  
+        { 
+            $('#myModal').modal('hide');  
+        }); 
+    });
+    function GetProductCurrentStock(product_id){
+        $.ajax({
+            contentType: 'application/json',
+            type: "GET",
+            url: "../Order/GetProductCurrentStock?product_id="+product_id,
+            success: function (d) {
+                var product_id = $("#product_name").val();
+                var product_name = $('#product_name option:selected').text();
+                //product_name+='<a>X</a>';
+
+                //Reference the Country TextBox.
+                var quantity = $("#quantity").val();
+                var selling_price = $('#selling_price').val();
+                var discount = $('#discount').val() == '' ? 0 : $('#discount').val();
+                var totalAmount = (selling_price * quantity) - discount;
+                var check_orders = orderItemList.filter(order => (order.product_id == product_id));
+                if(check_orders.length>0)
+                {
+                    alert('Product already exists....!!');
+                }
+                else
+                {
+                    var quantityInt=parseInt(quantity);
+                    if(quantityInt>d)
+                    {
+                        alert('Available Quantity is '+d+'.Please enter less quantity.');
+                    }
+                    else
+                    {
+                        var orderItem = {
+                            product_id: product_id,
+                            quantity: quantity,
+                            selling_price: selling_price,
+                            discount: discount
+                        };
+                   
+                   
+                   
+                        orderItemList.push(orderItem);
+
+                        ////Send the records to server for saving to database.
+                        ////Add the Name value to first cell.
+                        var a='<button class="close" title="Remove" style="color:red;" onclick="RemoveItem(this,'+product_id+')">X</button>';
+                   
+                        var markup = '<tr><td>'+product_name+a+'</td><td>' + quantity + '</td><td>' + selling_price + '</td><td>'+ discount + '</td><td>'+ totalAmount + '</td></tr>';
+                        $('#orderItems').append(markup);
+                        $("#product_name").val('')
+                        $("#selling_price").val('')
+                        $("#quantity").val('')
+                        $("#discount").val('')
+                  
+                    }
+                }
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+                $(".loader").hide();
+            }
+        });
+    }
+    function arrayRemove(arr, value) {
+        return arr.filter(function(ele){ 
+            return ele.product_id != value; 
+        });
+    }
+    function RemoveItem(e,product_id){
+        var r = confirm("Are you sure to delete?");
+        if (r == true) {
+            e.closest("tr").remove();
+            orderItemList=arrayRemove(orderItemList,product_id);
+        }
+    }
+    function IsValid() {
+        var errorCount = 0;
+        if ($('#product_name').val() == '') {
+            $('#valMessageProductId').show();
+            errorCount++;
+        }
+        else {
+            $('#valMessageProductId').hide();
+        }
+        if ($('#selling_price').val() == '') {
+            $('#valMessageSellingPrice').show();
+            errorCount++;
+        }
+        else {
+            $('#valMessageSellingPrice').hide();
+            if ($.isNumeric($('#selling_price').val()) == false) {
+                $('#valMessageSellingPrice2').show();
+                errorCount++;
+            }
+            else {
+                $('#valMessageSellingPrice2').hide();
+            }
+        }
+        if ($('#quantity').val() == '') {
+            $('#valMessageQuantity').show();
+            errorCount++;
+        }
+        else {
+            $('#valMessageQuantity').hide();
+            if ($.isNumeric($('#quantity').val()) == false) {
+                $('#valMessageQuantity2').show();
+                errorCount++;
+            }
+            else {
+                $('#valMessageQuantity2').hide();
+            }
+        }
+        if (errorCount > 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    function SetValue(row, index, textbox) {
+        row.find("td").eq(index).html(textbox);
+        //Clear the TextBox.
+    }
+    function SetValueButton(row, index, textbox) {
+        row.find("td").eq(index).append(textbox);
+        //Clear the TextBox.
+    }
+    function Createorder() {
+        $(".loader").show();
+        var order = {
+            customer_id: $('#customer_id').val(),
+            store_id: $('#store_id').val(),
+            order_status_id: $('#order_status_id').val(),
+            order_date: $('#order_date').val(),
+            orderItemList: orderItemList
+        };
+        //alert(order.order_date);
+        $.ajax({
+            contentType: 'application/json',
+            type: "POST",
+            url: "../Order/CreateOrder",
+            data: JSON.stringify(order),
+            success: function (d) {
+                $(".loader").hide();
+                location.reload();
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+                $(".loader").hide();
+            }
+        });
+    }
+    function ViewOrderDetails(order_id) {
+        var options = {  
+            'backdrop': 'static',  
+            keyboard: true  
+        }; 
+        $.ajax({
+            contentType: 'application/json',
+            type: "GET",
+            url: "../Order/_orderDetails?order_id="+order_id,
+            success: function (data) {
+                //alert(data);
+                $('#myModalContent').html(data);  
+                $('#myModal').modal(options);  
+                $('#myModal').modal('show');
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    }
+    $( function() {
+        $( "#order_date" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            format: "mm/dd/yyyy",
+            language: "en"
+        });
+    } );
+</script>
+<br />
+<div id="message" style="display: none;">
+</div>
+<h2>Order Details</h2>
+<div class="row">
+
+    <div class="modal" role="dialog" id="myModal">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Order Items</h5>
+       
+      </div>
+      <div class="modal-body" id='myModalContent'>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="closbtn" data-dismiss="modal" >Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="customerName">
+                Customer Name</label>
+            @Html.DropDownList("customer_id", Model.CostumerList, "Select Customer", new { @class = "form-control" })
+            <span id="valMessageCustomerName" style="color: red; display: none;">Customer Name is required!</span>
+        </div>
+        <div class="form-group">
+            <label for="storeName">
+                Store Name</label>
+            @Html.DropDownList("store_id", Model.StoreList, "Select Store", new { @class = "form-control" })
+            <span id="valMessageStoreName" style="color: red; display: none;">Store Name is required!</span>
+        </div>
+
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label for="order_date">
+                Order Date</label>
+            @Html.TextBox("order_date", null, new { @class = "form-control" })
+            <span id="valMessageOrderDate" style="color: red; display: none;">Order Date is required!</span>
+        </div>
+        <div class="form-group">
+            <label for="orderStatus">
+                Order Status</label>
+            @Html.DropDownList("order_status_id", new SelectList(Enum.GetValues(typeof(Grocers.Models.Order.OrderStatus))), "Select Order Status", new { @class = "form-control" })
+            <span id="valMessageOrderStatus" style="color: red; display: none;">Order Status is required!</span>
+        </div>
+    </div>
+</div>
+<div>
+    <h2>Order Items</h2>
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label for="product_id">
+                    Product List</label>
+                @Html.DropDownList("product_name", Model.ProductList, "Select Product", new { @class = "form-control" })
+                <span id="valMessageProductId" style="color: red; display: none;">Product Name is required!</span>
+            </div>
+        </div>
+        <div class="col-sm-7">
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="quantity">
+                            Quantity</label>
+                        @Html.TextBox("quantity", null, new { @class = "form-control " })
+                        <span id="valMessageQuantity" style="color: red; display: none;">Quantity is required!</span>
+                        <span id="valMessageQuantity2" style="color: red; display: none;">Quantity should be a number..!</span>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="selling_price">
+                            Selling Price</label>
+                        @Html.TextBox("selling_price", null, new { @class = "form-control" })  <span id="valMessageSellingPrice2" style="color: red; display: none;">Selling Price should be a number..!</span>
+                        <span id="valMessageSellingPrice" style="color: red; display: none;">Selling Price is required!</span>
+
+                    </div>
+                </div>
+
+                
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="discount">
+                            Discount</label>
+                        @Html.TextBox("discount", null, new { @class = "form-control" })
+                        <span id="valMessageDiscount" style="color: red; display: none;"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-5" style="position: absolute; bottom: 0; left: 385px;">
+                    <div class="form-group">
+                         <label >
+                            &nbsp;</label>
+                        <input id="btnAddItem" type="button" value="Add Item" class="btn btn-success" />
+                        <span >&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+       @* @webGrid.GetHtml(
+        htmlAttributes: new { @id = "WebGrid", @class = "table table-bordered" },
+        columns: webGrid.Columns(
+                 webGrid.Column("product_name", "Product Name"),
+                 webGrid.Column("quantity", "Quantity"),
+                 webGrid.Column("selling_price", "Selling Price"),
+                 webGrid.Column("discount", "Discount"),
+                 webGrid.Column("total", "Total Amount"),
+                 webGrid.Column(null, null, format: @<input type="hidden" id="product_id" />, style: "cellHide")),
+
+                    headerStyle: "header_table"
+                 )*@
+
+        <table id="orderItems" class="table table-bordered">
+        <thead>
+            <tr style="background-color:#28a745;color:white;">
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Selling Price</th>
+                <th>Discount</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="form-group text-center">
+            <input id="btnSave" type="button" value="SAVE" class="btn btn-success" />
+            <input id="btnCancel" type="button" value="CANCEL" class="btn btn-success" />
+        </div>
+    </div>
+</div>
+<h2>Order List</h2>
+<div class="row">
+    <div class="col-sm-12">
+        @*<table class="table table-bordered" style="width: 100%;">
+            <tr style="background-color: #28a745; color: white;">
+                <th>Order Id </th>
+                <th style="text-align: center;">Customer Name </th>
+                <th style="text-align: center;">Store Name </th>
+                <th style="text-align: center;">Order Status </th>
+                <th style="text-align: center;">Order Date</th>
+                <th style="text-align: center;">Order Amount</th>
+            </tr>
+            @if (Model.OrderList != null && Model.OrderList.ToList().Count > 0)
+            {
+                foreach (var d in Model.OrderList)
+                {  
+                <tr>
+
+                    <td>
+                        <input class="btn btn-link" type="button" id="edit_@d.order_id" value="@d.order_id" onclick="ViewOrderDetails(@d.order_id)" />
+                    </td>
+                    <td>@d.customer_name</td>
+                    <td>@d.store_name</td>
+                    <td>@d.order_status</td>
+                    <td>@d.order_date</td>
+                    <td>@d.order_amount</td>
+
+                </tr>  
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">No Records</td>
+                </tr>
+            }
+
+        </table>*@
+
+          @webGrid.GetHtml(
+        htmlAttributes: new { @id = "WebGrid", @class = "table table-bordered" },
+        columns: webGrid.Columns(
+        webGrid.Column("edit", "Action", format:@<button class="btn btn-link" id="edit_@item.order_id" onclick="ViewOrderDetails(@item.order_id)">@item.order_id</button>),
+                 webGrid.Column("customer_name", "Customer Name"),
+                 webGrid.Column("store_name", "Store Name"),
+                 webGrid.Column("order_status", "Order Status"),
+                 webGrid.Column("order_date", "Order Date"),
+                 webGrid.Column("order_amount", "Order Amount")),
+                 
+                    headerStyle: "header_table",
+                    footerStyle: "table-pager"
+                 )
+    </div>
+
+</div>

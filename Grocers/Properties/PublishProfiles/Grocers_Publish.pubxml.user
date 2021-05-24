@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\Grocers_Script</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/Grocers.dll">
+      <publishTime>09/13/2020 18:45:00</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>07/16/2020 16:11:48</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>07/16/2020 16:11:47</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>07/16/2020 16:11:49</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>07/16/2020 16:11:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>07/16/2020 16:11:49</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>07/16/2020 16:11:50</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>07/16/2020 16:11:49</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>07/16/2020 16:11:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Deployment.dll">
+      <publishTime>07/16/2020 16:11:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.dll">
+      <publishTime>07/16/2020 16:11:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Razor.dll">
+      <publishTime>07/16/2020 16:11:48</publishTime>
+    </File>
+    <File Include="css/bootstrap-datepicker.css">
+      <publishTime>07/22/2020 19:04:05</publishTime>
+    </File>
+    <File Include="css/bootstrap-grid.css">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap-grid.css.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap-grid.min.css">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap-grid.min.css.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap-reboot.css">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap-reboot.css.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap-reboot.min.css">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap-reboot.min.css.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap.css">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap.css.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap.min.css">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/bootstrap.min.css.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="css/font-awesome.min.css">
+      <publishTime>08/10/2020 16:13:42</publishTime>
+    </File>
+    <File Include="css/jquery.orgchart.css">
+      <publishTime>08/24/2020 17:58:42</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.eot">
+      <publishTime>08/10/2020 16:34:48</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.svg">
+      <publishTime>08/10/2020 16:34:48</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.ttf">
+      <publishTime>08/10/2020 16:34:48</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.woff">
+      <publishTime>08/10/2020 16:34:48</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.woff2">
+      <publishTime>08/10/2020 16:34:48</publishTime>
+    </File>
+    <File Include="fonts/FontAwesome.otf">
+      <publishTime>08/10/2020 16:34:48</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>07/16/2020 16:11:41</publishTime>
+    </File>
+    <File Include="Images/ajax-loader.gif">
+      <publishTime>08/17/2020 19:01:12</publishTime>
+    </File>
+    <File Include="Images/avatar/NoImage.jpg">
+      <publishTime>08/10/2020 16:17:57</publishTime>
+    </File>
+    <File Include="Images/grocers_logo.png">
+      <publishTime>07/19/2020 22:09:57</publishTime>
+    </File>
+    <File Include="js/bootstrap-datepicker.js">
+      <publishTime>07/22/2020 19:05:50</publishTime>
+    </File>
+    <File Include="js/bootstrap.bundle.js">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="js/bootstrap.bundle.js.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="js/bootstrap.bundle.min.js">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="js/bootstrap.bundle.min.js.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="js/bootstrap.js">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="js/bootstrap.js.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="js/bootstrap.min.js">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="js/bootstrap.min.js.map">
+      <publishTime>07/18/2020 20:57:55</publishTime>
+    </File>
+    <File Include="js/jquery.orgchart.js">
+      <publishTime>08/10/2020 15:48:27</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>07/16/2020 16:11:50</publishTime>
+    </File>
+    <File Include="scripts/jquery-3.0.0.js">
+      <publishTime>07/18/2020 21:01:01</publishTime>
+    </File>
+    <File Include="scripts/jquery-3.0.0.min.js">
+      <publishTime>07/18/2020 21:01:01</publishTime>
+    </File>
+    <File Include="scripts/jquery-3.0.0.min.map">
+      <publishTime>07/18/2020 21:01:01</publishTime>
+    </File>
+    <File Include="Views/Account/Index.cshtml">
+      <publishTime>07/16/2020 18:55:22</publishTime>
+    </File>
+    <File Include="Views/Account/Login.cshtml">
+      <publishTime>08/20/2020 17:29:51</publishTime>
+    </File>
+    <File Include="Views/Brand/Index.cshtml">
+      <publishTime>08/24/2020 20:11:15</publishTime>
+    </File>
+    <File Include="Views/Category/CategoryUomMapping.cshtml">
+      <publishTime>08/11/2020 15:33:55</publishTime>
+    </File>
+    <File Include="Views/Category/Index.cshtml">
+      <publishTime>08/25/2020 22:44:08</publishTime>
+    </File>
+    <File Include="Views/Customer/CustomerPoints.cshtml">
+      <publishTime>09/13/2020 16:20:28</publishTime>
+    </File>
+    <File Include="Views/Customer/Index.cshtml">
+      <publishTime>09/07/2020 17:46:41</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>08/24/2020 18:27:33</publishTime>
+    </File>
+    <File Include="Views/Order/Index.cshtml">
+      <publishTime>08/25/2020 21:41:07</publishTime>
+    </File>
+    <File Include="Views/Order/_orderDetails.cshtml">
+      <publishTime>08/17/2020 18:30:16</publishTime>
+    </File>
+    <File Include="Views/Product/Index.cshtml">
+      <publishTime>08/24/2020 20:12:41</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout.cshtml">
+      <publishTime>09/07/2020 19:09:48</publishTime>
+    </File>
+    <File Include="Views/Stock/CurrentStock.cshtml">
+      <publishTime>08/25/2020 21:45:18</publishTime>
+    </File>
+    <File Include="Views/Stock/Index.cshtml">
+      <publishTime>08/24/2020 21:47:35</publishTime>
+    </File>
+    <File Include="Views/Store/Index.cshtml">
+      <publishTime>08/24/2020 20:14:43</publishTime>
+    </File>
+    <File Include="Views/Web.config">
+      <publishTime>07/16/2020 16:11:41</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>09/13/2020 18:45:01</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

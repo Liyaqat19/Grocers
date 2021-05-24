@@ -1,0 +1,52 @@
+D:\CS\Grocers\Grocers\bin\Grocers.dll
+D:\CS\Grocers\Grocers\bin\Grocers.pdb
+D:\CS\Grocers\Grocers\bin\Microsoft.Web.Infrastructure.dll
+D:\CS\Grocers\Grocers\bin\Newtonsoft.Json.dll
+D:\CS\Grocers\Grocers\bin\System.Net.Http.Formatting.dll
+D:\CS\Grocers\Grocers\bin\System.Web.Helpers.dll
+D:\CS\Grocers\Grocers\bin\System.Web.Http.dll
+D:\CS\Grocers\Grocers\bin\System.Web.Http.WebHost.dll
+D:\CS\Grocers\Grocers\bin\System.Web.Mvc.dll
+D:\CS\Grocers\Grocers\bin\System.Web.Razor.dll
+D:\CS\Grocers\Grocers\bin\System.Web.WebPages.Deployment.dll
+D:\CS\Grocers\Grocers\bin\System.Web.WebPages.dll
+D:\CS\Grocers\Grocers\bin\System.Web.WebPages.Razor.dll
+D:\CS\Grocers\Grocers\bin\Newtonsoft.Json.xml
+D:\CS\Grocers\Grocers\bin\System.Net.Http.Formatting.xml
+D:\CS\Grocers\Grocers\bin\System.Web.Helpers.xml
+D:\CS\Grocers\Grocers\bin\System.Web.Http.xml
+D:\CS\Grocers\Grocers\bin\System.Web.Http.WebHost.xml
+D:\CS\Grocers\Grocers\bin\System.Web.Mvc.xml
+D:\CS\Grocers\Grocers\bin\System.Web.Razor.xml
+D:\CS\Grocers\Grocers\bin\System.Web.WebPages.xml
+D:\CS\Grocers\Grocers\bin\System.Web.WebPages.Deployment.xml
+D:\CS\Grocers\Grocers\bin\System.Web.WebPages.Razor.xml
+D:\CS\Grocers\Grocers\obj\Debug\Grocers.dll
+D:\CS\Grocers\Grocers\obj\Debug\Grocers.pdb
+D:\CS\Grocers\Grocers\obj\Debug\Grocers.csprojResolveAssemblyReference.cache
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\Grocers.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\Grocers.pdb
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\Microsoft.Web.Infrastructure.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\Newtonsoft.Json.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Net.Http.Formatting.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Helpers.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Http.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Http.WebHost.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Mvc.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Razor.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.WebPages.Deployment.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.WebPages.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.WebPages.Razor.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\Newtonsoft.Json.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Net.Http.Formatting.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Helpers.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Http.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Http.WebHost.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Mvc.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.Razor.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.WebPages.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.WebPages.Deployment.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\bin\System.Web.WebPages.Razor.xml
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\obj\Debug\Grocers.csprojResolveAssemblyReference.cache
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\obj\Debug\Grocers.dll
+C:\Liyaqat\Old PC Data\CS\Grocers\Grocers\obj\Debug\Grocers.pdb

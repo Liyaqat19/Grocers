@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Grocers.Models.OrderItem>
+@{
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //ViewBag.Title = "Store";
+    WebGrid webGrid = new WebGrid(source: Model, canPage: true, canSort: false);
+}
+<style>
+    .header_table {
+    background-color: #28a745;
+    color: white;
+    }
+</style>
+<div class="row">
+        @webGrid.GetHtml(
+        htmlAttributes: new { @id = "WebGrid1", @class = "table table-bordered" },
+        columns: webGrid.Columns(
+                 webGrid.Column("product_name", "Product Name"),
+                 webGrid.Column("quantity", "Quantity"),
+                 webGrid.Column("selling_price", "Selling Price"),
+                 webGrid.Column("discount", "Discount"),
+                 webGrid.Column("productAmount", "Total Amount")),
+                 
+                    headerStyle: "header_table"
+                 )
+    </div>

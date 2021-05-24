@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Grocers.Models.CurrentStock>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Current Stock";
+    WebGrid webGrid = new WebGrid(source: Model, canPage: true, rowsPerPage: 5, canSort: false);
+}
+<style>
+ .header_table {
+    background-color: #28a745;
+    color: white;
+    }
+</style>
+</br>
+<div id="message" style="display: none;">
+</div>
+<h2>Current Stock</h2>
+<div class="row">
+      @webGrid.GetHtml(
+        htmlAttributes: new { @id = "WebGrid", @class = "table table-bordered " },
+        columns: webGrid.Columns(
+                 webGrid.Column("product_name", "Product Name"),
+                 webGrid.Column("brand_name", "Brand Name"),
+                 webGrid.Column("category_name", "Category Name"),
+                 webGrid.Column("uom_name", "UOM Name"),
+                 webGrid.Column("AllStock", "All Stock"),
+                 webGrid.Column("OrderedStock", "Ordered Stock"),
+                 webGrid.Column("CurrentStock", "Current Stock")),
+                    headerStyle: "header_table"
+                 )
+</div>

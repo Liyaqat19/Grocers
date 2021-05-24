@@ -1,0 +1,140 @@
+﻿@model Grocers.Models.CategoryUomViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Category UOM Mapping";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+            if ($('#category_id').val() == '') {
+                $('#valMessageCategoryName').show();
+            }
+            else if ($('#size').val() == '' && $('#unit').val() != 'Pcs')
+            {
+                $('#valMessageSize').show();
+            }
+            else if ($('#unit').val() == '') {
+                $('#valMessageUnit').show();
+            }
+            else {
+                $('#valMessageCategoryName').hide();
+                $('#valMessageSize').hide();
+                $('#valMessageUnit').hide();
+                SaveUOMMapping();
+            }
+        });
+        $('#btnCancel').click(function () {
+            location.reload();
+        });
+    });
+    
+    function SaveUOMMapping() {
+        var categoryUomMapping = {
+            category_id: $('#category_id').val(),
+            uom_name: $('#size').val() + ' ' + $('#unit').val()
+        };
+        $.ajax({
+            contentType: 'application/json',
+            type: "POST",
+            url: "../Category/SaveUOMMapping",
+            data: JSON.stringify(categoryUomMapping),
+            success: function (d) {
+                location.reload();
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    }
+</script>
+@Html.Hidden("uom_id")
+<br />
+<div id="message" style="display: none;">
+</div>
+<h2>Category UOM Mapping</h2>
+<div class="row">
+
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="category_id">
+                Category</label>
+            @if (Model.CategoryList != null && Model.CategoryList.Count > 0)
+            {
+                @Html.DropDownList("category_id", Model.CategoryList, "Select Category", new { @class = "form-control" })
+            }
+            else
+            {
+                @Html.DropDownList("category_id", new List<SelectListItem>(), "Select Category", new { @class = "form-control" })
+            }
+
+            <span id="valMessageCategoryName" style="color: red; display: none;">Category is required!</span>
+
+        </div>
+        <div class="form-group">
+
+            <div class="form-row">
+                <div class="col">
+                    <label for="uom_name">
+                        Size</label>
+                    @Html.TextBox("size", null, new { @class = "form-control" })
+                    <span id="valMessageSize" style="color: red; display: none;">Size is required!</span>
+                </div>
+                <div class="col">
+                    <label for="unit">
+                        Unit</label>
+                    @Html.DropDownList("unit", new List<SelectListItem>  
+     { new SelectListItem { Text = "gm", Value = "gm"},  
+       new SelectListItem { Text = "kg", Value = "kg"},  
+       new SelectListItem { Text = "ml", Value = "ml"} ,
+       new SelectListItem { Text = "lt", Value = "lt"},
+       new SelectListItem { Text = "Pcs", Value = "Pcs"}  
+       }, "Select Unit", new { @class = "form-control" })
+                    <span id="valMessageUnit" style="color: red; display: none;">Unit is required!</span>
+                </div>
+            </div>
+        </div>
+
+        <input id="btnSave" type="button" value="SAVE" class="btn btn-success" />
+        <input id="btnCancel" type="button" value="CANCEL" class="btn btn-success" />
+    </div>
+
+    <div class="col-sm-4">
+    </div>
+    
+    <div class="col-sm-4">
+    </div>
+</div>
+<br />
+<h2>Category UOM Mapping List</h2>
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered" style="width: 100%;">
+            <tr style="background-color: #28a745; color: white;">
+                <th>UOM Id </th>
+                <th style="text-align: center;">Category</th>
+                <th style="text-align: center;">UOM</th>
+            </tr>
+            @if (Model.CategoryUomMappingList != null && Model.CategoryUomMappingList.ToList().Count > 0)
+            {
+                foreach (var d in Model.CategoryUomMappingList.ToList())
+                {  
+                <tr>
+                    <td>@d.uom_id</td>
+                    <td>@d.CategoryName</td>
+                    <td>@d.uom_name</td>
+                </tr>  
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No Records</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

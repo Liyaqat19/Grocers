@@ -1,0 +1,223 @@
+﻿@model Grocers.Models.CustomerViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Customer Points";
+}
+<style>
+    .scrollercustomerchildrendetails {
+        //overflow:scroll;
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height:250px;
+    }
+    .scrollercustomerredeempoints {
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: 250px;
+    }
+</style>
+<script type="text/javascript">
+    var totalpoints = 0;
+    var total_redeem_points = 0;
+    var remaining_points = 0;
+    $(document).ready(function () {
+
+        $('#btnGetDetails').click(function () {
+            if ($('#customer_id').val() == '') {
+                $('#valMessageCustomerName').show();
+            }
+            else {
+                $('#valMessageCustomerName').hide();
+                var customer_id = $('#customer_id').val();
+                GetPointDetails(customer_id);
+                $('#redeempoints_container').show();
+                $('#points_to_redeem').val('');
+
+            }
+        });
+        $('#btnCancel').click(function () {
+            location.reload();
+        });
+        $('#btnPointsToRedeem').click(function () {
+            if ($('#points_to_redeem').val() == '') {
+                $('#valMessagePointsToRedeem').show();
+            }
+            else {
+                $('#valMessagePointsToRedeem').hide();
+                RedeemPoints();
+            }
+        });
+        $("#points_to_redeem").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#valMessagePointsToRedeem2").show();
+            }
+            else {
+                $("#valMessagePointsToRedeem2").hide();
+            }
+        });
+
+    });
+    function RedeemPoints() {
+        var redeemPoints = {
+            redeem_points: $('#points_to_redeem').val(),
+            customer_id: $('#customer_id').val()
+        };
+        if ($('#points_to_redeem').val() > remaining_points) {
+            alert('Not enough points.Please enter less points to redeem.');
+        }
+        else {
+            $.ajax({
+                contentType: 'application/json',
+                type: "POST",
+                url: "../Customer/AddCustomerRedeemPoints",
+                data: JSON.stringify(redeemPoints),
+                success: function (d) {
+                    GetPointDetails($('#customer_id').val());
+                },
+                error: function (e) {
+                    var message = $('#message');
+                    message.show();
+                    message.text('Error occured, please try again after sometime!');
+                    message.addClass('alert alert-danger');
+                }
+            });
+        }
+    };
+    function GetPointDetails(customer_id) {
+        $.ajax({
+            contentType: 'application/json',
+            type: "GET",
+            url: "../Customer/GetCustomerPoints?customer_id=" + customer_id,
+            success: function (d) {
+                //alert(JSON.stringify(d.data.CustomerOwnPoints));
+                $('#customerpointdetails tr')[1].remove();
+                $('#customerchildrendetails tr')[1].remove();
+                $("#customerredeempoints").find("tr:gt(0)").remove();
+                //totalpoints = d.data.CustomerMatchedPoints + d.data.CustomerOwnPoints;
+                remaining_points = d.data.TotalPoints;
+                var markup = '<tr><td>' + d.data.LeftTotalPoints + '</td><td>' + d.data.RightTotalPoints + '</td><td>' + d.data.CustomerMatchedPoints + '</td><td>' + d.data.CustomerOwnPoints + '</td><td>' + d.data.CustomerMatchedPoints + '</td><td>' + d.data.RedeemedPoints + '</td><td>' + d.data.TotalPoints + '</td></tr>';
+                $('#customerpointdetails').append(markup);
+                var leftchildrenstr = '';
+                var rightchildrenstr = '';
+                if (d.data.LeftChildren != null) {
+                    if (d.data.LeftChildren.length > 0) {
+                        for (var i = 0; i < d.data.LeftChildren.length; i++) {
+                            leftchildrenstr += d.data.LeftChildren[i] + '</br>';
+                        }
+                    }
+                }
+                if (d.data.RightChildren != null) {
+                    if (d.data.RightChildren.length > 0) {
+                        for (var i = 0; i < d.data.RightChildren.length; i++) {
+                            rightchildrenstr += d.data.RightChildren[i] + '</br>';
+                        }
+                    }
+                }
+                var childrenmarkup = '';
+                if (leftchildrenstr == '' && rightchildrenstr == '') {
+                    childrenmarkup = '<tr><td colspan="2" style="text-align: center;">No Details Available</td></tr>'
+                }
+                else {
+                    childrenmarkup = '<tr><td>' + leftchildrenstr + '</td><td>' + rightchildrenstr + '</td></tr>'
+                }
+                $('#customerchildrendetails').append(childrenmarkup);
+                var nodetailsmarkup = '';
+                if (d.data.redeemDetails != null) {
+                    if (d.data.redeemDetails.length > 0) {
+                        for (var i = 0; i < d.data.redeemDetails.length; i++) {
+                            var redeemMarkup = '<tr><td>' + d.data.redeemDetails[i].redeem_points + '</td><td>' + d.data.redeemDetails[i].redeem_date + '</td></tr>';
+                            $('#customerredeempoints').append(redeemMarkup);
+                        }
+                    }
+                }
+                else {
+                    nodetailsmarkup = '<tr><td colspan="2" style="text-align: center;">No Details Available</td></tr>';
+                    $('#customerredeempoints').append(nodetailsmarkup);
+                }
+            },
+            error: function (e) {
+                var message = $('#message');
+                message.show();
+                message.text('Error occured, please try again after sometime!');
+                message.addClass('alert alert-danger');
+            }
+        });
+    };
+</script>
+
+<br />
+<h2>Customer Points</h2>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="customerName">
+                Customer Name</label>
+            @Html.DropDownList("customer_id", Model.IntroducerList, "Select Customer", new { @class = "form-control" })
+            <span id="valMessageCustomerName" style="color: red; display: none;">Customer Name is required!</span>
+        </div>
+        <input id="btnGetDetails" type="button" value="GET DETAILS" class="btn btn-success" />
+        <input id="btnCancel" type="button" value="CANCEL" class="btn btn-success" />
+
+        <div id="redeempoints_container" style="display: none;">
+            <div class="form-group">
+                </br><label for="PointsToRedeem">
+                    Points To Redeem</label>
+                @Html.TextBox("points_to_redeem", null, new { placeholder = "Enter Points To Redeem", @class = "form-control" })
+                <span id="valMessagePointsToRedeem" style="color: red; display: none;">Points are required!</span>
+                <span id="valMessagePointsToRedeem2" style="color: red; display: none;">Points should be a number!</span>
+            </div>
+            <input id="btnPointsToRedeem" type="button" value="REDEEM POINTS" class="btn btn-success" />
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="form-group">
+            <h3>Points Detail</h3>
+            <table id="customerpointdetails" class="table table-bordered" style="width: 100%;">
+                <tr style="background-color: #28a745; color: white;">
+                    <th style="text-align: center;">Left Points</th>
+                    <th style="text-align: center;">Right Points</th>
+                    <th style="text-align: center;">Matched Points</th>
+                    <th style="text-align: center;">Own Points</th>
+                    <th style="text-align: center;">Total Points</th>
+                    <th style="text-align: center;">Redeemed Points</th>
+                    <th style="text-align: center;">Remaining Points</th>
+                </tr>
+                <tr>
+                    <td colspan="7" style="text-align: center;">No Details Available</td>
+                </tr>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>Downline</h3>
+                <div class="scrollercustomerchildrendetails">
+                    <table id="customerchildrendetails" class="table table-bordered" style="width: 100%;">
+                        <tr style="background-color: #28a745; color: white;">
+                            <th style="text-align: center;">Left Children</th>
+                            <th style="text-align: center;">Right Children</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">No Details Available</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <h3>Redeem History</h3>
+                <div class="scrollercustomerredeempoints">
+                    <table id="customerredeempoints" class="table table-bordered" style="width: 100%;">
+                        <tr style="background-color: #28a745; color: white;">
+                            <th style="text-align: center;">Redeem Points</th>
+                            <th style="text-align: center;">Date</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">No Details Available</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
